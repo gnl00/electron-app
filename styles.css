@@ -2,22 +2,21 @@
   margin: 0;
   padding: 0;
   width: 98vw;
-  height: 80vh;
   resize: none;
   -webkit-app-region: drag;
-  background: rgb(219, 209, 209);
 }
 
 #ipt-box {
   margin: 0;
   padding: 0;
-  width: inherit;
-  height: 100%;
+  width: 100%;
   -webkit-app-region: no-drag;
 
-  font-size: 24px;
+  font-size: 20px;
 }
 
-#btn {
-  -webkit-app-region: no-drag;
+#hr-top {
+  height: 1px;
+  border: 0;
+  border-top: 2px dashed #a2a9b6;
 }

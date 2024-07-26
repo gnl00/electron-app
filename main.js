@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, clipboard, contextBridge, ipcMain, ipcRenderer } = require('electron')
+const { app, BrowserWindow, globalShortcut, clipboard, ipcMain } = require('electron')
 const robot = require('robotjs');
 const path = require('node:path')
 const { ON_COPY } = require('./constants')
@@ -50,16 +50,17 @@ const createWindow = () => {
 
 const initWindow = () => {
   return new BrowserWindow({
-    width: 800,
-    height: 285,
+    width: 1080,
+    height: 500,
     frame: false, // 无边框
     alwaysOnTop: true,
     focusable: true,
-    resizable: false,
+    resizable: true,
     webPreferences: {
       nodeIntegration: true, // 是否允许在渲染进程中执行 Node.js API
       enableDevTools: true,
       contextIsolation: true,
+      enableRemoteModule: true,
       preload: path.join(__dirname, 'preload.js')
     }
   });

@@ -18,7 +18,15 @@ sudo apt-get install libxtst-dev libpng++-dev python3 python-is-python3 gcc
 
 3、failed to start electron by yarn after install robotjs
 
+such as error below
 ```shell
+robotjs.node was compiled against a different Node.js version using NODE_MODULE_VERSION 115. This version of Node.js requires NODE_MODULE_VERSION 125.
+```
+
+fixed it by this way
+
+```shell
+# or yarn
 npm install -g node-gyp
 npm install -D electron-rebuild
 npx electron-rebuild -f -t prod,optional,dev -w robotjs
