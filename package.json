@@ -1,0 +1,19 @@
+{
+  "name": "electron-app",
+  "version": "1.0.0",
+  "description": "first electron app",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "author": "gnl",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.2.1",
+    "electron-rebuild": "^3.2.9"
+  },
+  "dependencies": {
+    "robotjs": "^0.6.0"
+  }
+}

@@ -1,0 +1,149 @@
+const { app, BrowserWindow, globalShortcut, clipboard, contextBridge, ipcMain } = require('electron')
+const robot = require('robotjs');
+const path = require('node:path')
+const { FROM_RENDERER, FROM_MAIN } = require('./apiConstants')
+
+let selectedContent = ''
+app.whenReady().then(() => {
+  const retVal = globalShortcut.register('CommandOrControl+G', () => {
+    showWindow();
+  })
+  const keyBindEsc = globalShortcut.register('Esc', () => {
+    win.hide()
+  })
+
+  if (!retVal) {
+    console.log('shortcut registration failed');
+  }
+
+  // when app ready register ipcMain channels
+  ipcMain.handle(FROM_MAIN, () => selectedContent)
+
+  ipcMain.handle(FROM_RENDERER, (event, arg) => {
+    console.log(arg);
+  })
+
+  // Check whether a shortcut is registered.
+  console.log('shortcut CommandOrControl+G registed: ', globalShortcut.isRegistered('CommandOrControl+G'));
+  console.log('shortcut Esc registed: ', globalShortcut.isRegistered('Esc'));
+
+  createWindow();
+})
+
+app.on('will-quit', () => {
+  // Unregister a shortcut.
+  // globalShortcut.unregister('CommandOrControl+X')
+
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll();
+})
+
+let win;
+let lastClickTime = 0;
+const createWindow = () => {
+  win = initWindow();
+
+  win.on('show', () => {
+    console.log('on show');
+
+    win.webContents.focus()
+
+    // get the mouse position
+    const mouse = robot.getMousePos();
+    console.log(mouse);
+
+    // save latest clipboard content
+    // const clipboardContent = clipboard.readText();
+
+    // 模拟按下 Ctrl 键（Windows/Linux）或 Cmd 键（macOS）
+    if (process.platform === 'darwin') {
+      robot.keyTap('c', 'command');
+      robot.keyTap('c', 'command');
+    } else {
+      robot.keyTap('c', 'control');
+      robot.keyTap('c', 'control');
+    }
+
+    const selectedContent = clipboard.readText();
+    console.log('read from clipboard: ', selectedContent);
+
+    // resume clipboard content
+    // clipboard.writeText(clipboardContent, 'selection')
+  })
+
+
+  win.on('mouseup', (event) => {
+    console.log('on mouseup');
+    console.log('mouse up event', event);
+  })
+
+  win.on('focus', () => {
+    console.log('on focus');
+  })
+
+  win.on('blur', () => {
+    console.log('on blur');
+    // win.close()
+    win.hide()
+  })
+
+  win.loadFile('index.html');
+  win.webContents.openDevTools(); // error "Request Autofill.enable failed. {"code":-32601,"message":"'Autofill.enable' wasn't found"}"
+
+}
+
+const initWindow = () => {
+  return new BrowserWindow({
+    width: 800,
+    height: 285,
+    frame: false, // 无边框
+    alwaysOnTop: true,
+    focusable: true,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: true, // 是否允许在渲染进程中执行 Node.js API
+      enableDevTools: true,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
+  });
+}
+
+/**
+ * windowOperations such as show close and more...
+ * @param {BrowserWindow} win
+ * @returns {void}
+ */
+const windowOperations = (win) => {
+  console.log("windowOperations");
+  closeWindowEvent(win);
+}
+
+const showWindow = () => {
+  console.log('CommandOrControl+G pressed');
+  win.show()
+}
+
+// double-click to close window
+/**
+ * Description
+ * @param {BrowserWindow} win
+ * @returns {void}
+ */
+const closeWindowEvent = (win) => {
+  win.on('mouseup', (evt) => {
+    if (doubleClick()) {
+      win.close()
+    }
+  })
+}
+
+const doubleClick = (evt) => {
+  const currentTime = new Date().getTime();
+  if (currentTime - lastClickTime < 500) { // 如果两次点击在500毫秒内
+    console.log('double click');
+    return true;
+  }
+  lastClickTime = currentTime;
+  return false;
+}

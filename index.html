@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>ElectronApp</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div id="app">
+      <button id="btn">Click</button>
+      <input id="ipt-box" type="text" placeholder="input somethings">
+      <p id="info"></p>
+    </div>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
