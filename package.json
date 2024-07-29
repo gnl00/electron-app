@@ -5,16 +5,29 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "author": "gnl",
   "license": "MIT",
+  "config": {
+    "forge": {
+      "makers": [
+        {
+          "name": "@electron-forge/maker-deb"
+        }
+      ]
+    }
+  },
   "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
     "electron": "^31.2.1",
     "electron-rebuild": "^3.2.9"
   },
   "dependencies": {
-    "ky": "^1.5.0",
     "robotjs": "^0.6.0"
   }
 }

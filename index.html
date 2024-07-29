@@ -3,15 +3,29 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
     <title>ElectronApp</title>
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
     <div id="app">
-      <textarea id="ipt-box" type="text" placeholder="input somethings"></textarea>
+      Token <input id="ipt-tk" type="text" placeholder="input your token first" />
+      <br />&ensp;
+      <textarea id="ipt-box" type="text" placeholder="input translate raw texts"></textarea>
+      <br />
+      <div id="div-operate">
+        <div id="div-operate-slot">
+          Models <select id="select-model" name="models">
+            <option value="Qwen">Qwen</option>
+            <option value="DeepSeek">DeepSeek</option>
+            <option value="glm">glm</option>
+            <option value="Yi">Yi</option>
+          </select>
+        </div>
+        <button id="btn">Submmit</button>
+      </div>
+      <hr id="hr-top" />
     </div>
-    <hr id="hr-top" />
     <script src="./renderer.js"></script>
   </body>
 </html>

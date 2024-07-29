@@ -60,7 +60,7 @@ const initWindow = () => {
       nodeIntegration: true, // 是否允许在渲染进程中执行 Node.js API
       enableDevTools: true,
       contextIsolation: true,
-      enableRemoteModule: true,
+      // enableRemoteModule: true,
       preload: path.join(__dirname, 'preload.js')
     }
   });

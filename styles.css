@@ -6,12 +6,34 @@
   -webkit-app-region: drag;
 }
 
+#ipt-tk {
+  -webkit-app-region: no-drag;
+}
+
+#div-operate {
+  -webkit-app-region: no-drag;
+  display: flex;
+}
+
+#div-operate-slot {
+  flex: 0.8
+}
+
+#select-model {
+  width: 75%;
+}
+
+#btn {
+  -webkit-app-region: no-drag;
+  flex: 0.2;
+  justify-content: flex-end;
+}
+
 #ipt-box {
   margin: 0;
   padding: 0;
   width: 100%;
   -webkit-app-region: no-drag;
-
   font-size: 20px;
 }
 

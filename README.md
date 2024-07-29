@@ -36,6 +36,17 @@ npx electron-rebuild -f -t prod,optional,dev -w robotjs
 
 只有开启 DevTools，才能在 DevTools 中的 console 看到 renderer 线程的 log，terminal 只输出 main 线程的 log
 
+5、发送 api 请求失败，报错 `electron violates the following Content Security Policy directive: "default-src 'self'"`
+
+修改 `index.html`
+
+```html
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+
+<!-- 去掉 default-src 'self'; -->
+<meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+```
+
 ## Run
 
 ```shell
@@ -140,3 +151,64 @@ window.addEventListener('DOMContentLoaded', async () => {
   })
 })
 ```
+
+## 编译 deb
+
+> 使用 electron-forge/cli
+
+`package.json` 添加项目依赖
+
+```shell
+yarn add --dev @electron-forge/cli
+yarn add --dev @electron-forge/maker-deb
+```
+
+Linux arm64 添加构建依赖
+
+> 以 Ubuntu 为例
+
+```shell
+sudo apt-get install libc6-dev-arm64-cross linux-libc-dev-arm64-cross \
+                       g++-aarch64-linux-gnu
+```
+
+添加 `forge.config.js`
+
+```js
+module.exports = {
+  makers: [
+    {
+      name: '@electron-forge/maker-deb',
+      config: {},
+    }
+  ],
+};
+```
+
+在 `package.json` 添加 config 部分
+
+```json
+{
+  "name": "electron-app",
+  "version": "1.0.0",
+  ...
+  "config": {
+    "forge": {
+      "makers": [
+        {
+          "name": "@electron-forge/maker-deb"
+        }
+      ]
+    }
+  },
+  ...
+}
+```
+
+执行 make 命令
+
+```shell
+yarn make
+```
+
+然后就能在 `out/` 文件夹中看到编译好的 deb 文件
