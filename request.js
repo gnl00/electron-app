@@ -1,14 +1,18 @@
+const options = {
+  method: 'GET',
+  headers: {
+    accept: "application/json",
+    authorization: "Bearer sk-xxx"
+  }
+}
+
 const getUserInfo = () => {
-  // https://api.siliconflow.cn/v1/user/info
-  fetch('https://api.siliconflow.cn/v1/user/info', {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer sk-hryhgnnbhedrcosjlsrylsewcxpjcjejoyxsxgtcznykdmfz"
-    }
-  }).then(res => {
+  fetch('https://api.siliconflow.cn/v1/user/info', options)
+  .then(res => res.json())
+  .then(res => {
     console.log('response: ', res);
   }).catch(err => {
-    console.log('error: ', err);
+    console.log(err);
   })
 }
 

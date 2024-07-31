@@ -1,14 +1,57 @@
 const { app, BrowserWindow, globalShortcut, clipboard, ipcMain } = require('electron')
 const robot = require('robotjs');
 const path = require('node:path')
-const { ON_COPY } = require('./constants')
+const fs = require('node:fs');
+const { ON_COPY, GET_APP_CONFIG, SAVE_CONFIG } = require('./constants')
 
-let selectedContent = ''
+const USER_CONFIG_PATH = app.getPath('userData')
+const APP_CONFIG_FILE = path.join(USER_CONFIG_PATH, 'config.json')
+
+const configData = {
+  token: ''
+};
+
+const getAppConfigFunc = () => {
+  const jsonStr = fs.readFileSync(APP_CONFIG_FILE)
+  const json = JSON.parse(jsonStr)
+  console.log('read config: ', json);
+  return json
+}
+
+const initConfigFunc = () => {
+  console.log('initing config file');
+  if (!fs.existsSync(USER_CONFIG_PATH)) {
+    fs.mkdirSync(USER_CONFIG_PATH);
+  }
+
+  if (!fs.existsSync(APP_CONFIG_FILE)) {
+    fs.writeFileSync(APP_CONFIG_FILE, JSON.stringify({...configData}, null, 2))
+  }
+  console.log('inited config file');
+}
+
+const saveConfigFunc = (_, config) => {
+  console.log('saving config', config);
+  if (fs.existsSync(APP_CONFIG_FILE)) {
+    fs.writeFileSync(APP_CONFIG_FILE, JSON.stringify({...configData, ...config}, null, 2))
+    console.log('configured config file');
+  }
+}
+
+ipcMain.handle(GET_APP_CONFIG, getAppConfigFunc)
+ipcMain.handle(SAVE_CONFIG, saveConfigFunc)
+
 app.whenReady().then(() => {
+  console.log('user config path', USER_CONFIG_PATH);
+  console.log('app config file', APP_CONFIG_FILE);
+  initConfigFunc({})
+
+  // TODO save shortcut to shortcut.json
+
   globalShortcut.register('CommandOrControl+G', () => {
     showWindow();
   })
-  globalShortcut.register('Esc', () => {
+  globalShortcut.register('CommandOrControl+Esc', () => {
     win.hide()
   })
 
@@ -33,7 +76,7 @@ const createWindow = () => {
       robot.keyTap('c', 'control');
     }
 
-    selectedContent = clipboard.readText();
+    const selectedContent = clipboard.readText();
     console.log('from clipboard: ', selectedContent);
     // send to renderer process
     win.webContents.send(ON_COPY, selectedContent)

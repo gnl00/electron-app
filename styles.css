@@ -4,9 +4,22 @@
   width: 98vw;
   resize: none;
   -webkit-app-region: drag;
+  overflow-x: hidden;
 }
 
 #ipt-tk {
+  -webkit-app-region: no-drag;
+}
+
+#btn-tk {
+  -webkit-app-region: no-drag;
+}
+
+#btn-tk-edit {
+  -webkit-app-region: no-drag;
+}
+
+#btn-tk-get {
   -webkit-app-region: no-drag;
 }
 
@@ -32,9 +45,9 @@
 #ipt-box {
   margin: 0;
   padding: 0;
-  width: 100%;
+  width: 98%;
   -webkit-app-region: no-drag;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 #hr-top {
